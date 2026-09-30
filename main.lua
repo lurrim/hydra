@@ -2509,27 +2509,24 @@ local function getObjGen()
     end
 
     local UIObjects = getObjects()
-    UIObjects.Parent = script
-
-    for i, v in pairs(UIObjects:GetChildren()) do
-        v.Parent = v.Parent.Parent
-    end
-
-    UIObjects:Destroy()
+    local CheatsFolder = UIObjects:FindFirstChild("Cheats")
+    local ObjectsFolder = UIObjects:FindFirstChild("Objects")
 
     function objGen.new(objectType, cheatName)
         if objectType == "Cheat" then
-            if script.Cheats:FindFirstChild(cheatName) then
-                return script.Cheats[cheatName]:Clone()
+            local cheat = CheatsFolder:FindFirstChild(cheatName)
+            if cheat then
+                return cheat:Clone()
             else
-                error("Invalid cheatType")
+                error("Invalid cheatType: " .. tostring(cheatName))
             end
         end
 
-        if script.Objects:FindFirstChild(objectType) then
-            return script.Objects[objectType]:Clone()
+        local obj = ObjectsFolder:FindFirstChild(objectType)
+        if obj then
+            return obj:Clone()
         else
-            error("Invalid objectType")
+            error("Invalid objectType: " .. tostring(objectType))
         end
     end
 
